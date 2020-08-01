@@ -1,0 +1,62 @@
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}
+
+.form-field-peq{
+  margin-right: 10px;
+  width: 20%;
+}
+
+.form-field{
+  margin-right: 10px;
+  width: 45%;
+}
+
+.radio-group {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.radio-button {
+margin: 5px;
+}
+
+.selected-value {
+margin: 15px 0;
+}
+
+.section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.margin {
+  margin: 0 10px;
+}
+
+.button-icon{
+  background:  #3f51b5;
+  color: white;
+  font-weight: bold;
+}
+
+.mat-card {
+  display: inline-block;
+  width: 30%;
+  margin: 5%;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.mat-card-header {
+  display: flex;
+}
+
+.img-content {
+  margin-left: 20%;
+  float: right;
+} 	
+

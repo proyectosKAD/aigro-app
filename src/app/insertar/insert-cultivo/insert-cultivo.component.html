@@ -1,0 +1,204 @@
+<div class="container">
+
+    <div>
+      <button mat-button class="close-button" color="accent" (click)="closeModal()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <h1>Ingresar Datos</h1>
+    </div>
+    
+    <form class="mat-dialog-content"  name="editForm" (ngSubmit)="submit" #formControl="ngForm">
+    
+      <div class="form">
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de cultivo"  [(value)]="tipoCultivo" name="tipoCultivo" required>
+            <mat-option *ngFor="let cul of cultivos" [value]="cul.idElemento">
+              {{cul.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field color="accent"  class="form-field">
+          <mat-select placeholder="Tipo de negocio" name="tipoNegocio" [(value)]="tipoNegocio" required>
+            <mat-option *ngFor="let neg of negocio" [value]="neg.idElemento">
+              {{neg.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form">
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="text" placeholder="Año" [(ngModel)]="ano" name="año" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form">
+        <label>Tipo</label>
+        <section color="accent" class="form-field">
+          <mat-checkbox class="margin" *ngFor="let act of actuacion" [(ngModel)]="act.checked" (change)="getCheckboxes()" name="tipoActuacion" 
+            [value]="act.idElemento">
+            {{act.descripcion}}
+          </mat-checkbox>
+        </section>
+      </div>
+
+      <div class="form">
+        <label>Cobertura</label>
+        <section color="accent" class="section" >
+          <mat-checkbox class="margin" *ngFor="let cob of cobertura" [(ngModel)]="cob.checked" (change)="getCheckboxes()" name="tipoCobertura"
+          [value]="cob.idElemento" >
+              {{cob.descripcion}}
+          </mat-checkbox>
+        </section>
+      </div >
+
+      <div class="from" *ngIf="showPlagas">
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="text" placeholder="Enferdad y/o plaga" [(ngModel)]="enfermedadPlaga" name="enfermedadPlaga" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form" *ngIf="showTomador">           
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de documento de identificación tomador" [(ngModel)]="tipoIdTomador" name="tipoIdTomador" required>
+            <mat-option *ngFor="let doc of documentos" [value]="doc.idElemento" >
+              {{doc.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field  color="accent" class="form-field">
+          <input matInput type="number" placeholder="Número de identificación tomador" [(ngModel)]="IdClienteTomador" name="IdClienteTomador" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form" *ngIf="showAsegurado">           
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de documento de identificación asegurado" [(ngModel)]="tipoIdAsegurado" name="tipoIdAsegurado" required>
+            <mat-option *ngFor="let doc of documentos" [value]="doc.idElemento" >
+              {{doc.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Número de identificación asegurado" [(ngModel)]="IdClienteAsegurado" name="IdClienteAsegurado" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form" *ngIf="showBeneficiario">           
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de documento de identificación beneficiario" [(ngModel)]="tipoIdBeneficiario" name="tipoIdBeneficiario" required>
+            <mat-option *ngFor="let doc of documentos" [value]="doc.idElemento" >
+              {{doc.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Número de identificación beneficiario" [(ngModel)]="IdClienteBeneficiario" name="IdClienteBeneficiario" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">     
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="text" placeholder="Nombre de la Finca y/o Lote" [(ngModel)]="finca" name="finca">
+          <button mat-button *ngIf="finca" matSuffix mat-icon-button aria-label="Clear" (click)="finca=''" required>
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Departamento" [(ngModel)]="departamento" name="departamento" >
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let dep of departamentos" [value]="dep.idElemento" (onSelectionChange)="change($event)">
+              {{dep.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-form-field  color="accent" class="form-field">
+          <mat-select placeholder="Municipio" [(value)]="municipio" name="municipio">
+            <mat-option *ngFor="let mun of municipios" [value]="mun">
+              {{mun.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="form-field">
+          <input matInput type="text" placeholder="Vereda" [(ngModel)]="vereda" name="vereda">
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="text" placeholder="Latitud" [(ngModel)]="latitud" name="latitud" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="text" placeholder="Longitud" [(ngModel)]="longitud" name="longitud" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Area" [(ngModel)]="area" name="area" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>  
+        <mat-form-field class="form-field">
+          <input matInput type="text" placeholder="Densidad (Plantas / Ha)" [(ngModel)]="densidad" name="densidad" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Poliza" [(ngModel)]="poliza" name="poliza" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>  
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput currency-mask ng-model="amount" type="number" placeholder="Valor asegurado / Ha" [(ngModel)]="valorasegurado" name="valorasegurado" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Valor asegurado total" value={{valorasegurado*area}} [readonly]="true" [(ngModel)]="valortotal" name="valortotal">
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Tasa" [(ngModel)]="tasa" name="tasa" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div form>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Prima" value={{(valorasegurado*area)*tasa}} [readonly]="true" [(ngModel)]="prima" name="prima">
+        </mat-form-field>
+        <mat-form-field color="accent" class="form-field">
+          <input matInput type="number" placeholder="Deducible" [(ngModel)]="deducible" name="deducible" required>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form">  
+        <mat-form-field  color="accent" class="form-field">
+          <input matInput [matDatepicker]="picker" placeholder="Vigncia Desde" [(ngModel)]="fechaInicio" name="fechaini" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+        <mat-form-field  color="accent" class="form-field">
+          <input matInput [matDatepicker]="picker2" placeholder="Vigencia Hasta" [(ngModel)]="fechaFin" name="fechafin" required>
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>          
+      </div>
+    </form>
+    
+  <div class="button-row">
+    <button class="button-icon" mat-button [type]="submit" color="primary" [disabled]="!formControl.valid" (click)="confirmAdd()">Insertar</button>
+    <button class="button-icon" mat-button [type]="reset" color="primary" (click)="formControl.reset()">Limpiar</button>
+  </div>
+</div>

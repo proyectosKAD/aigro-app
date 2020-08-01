@@ -1,0 +1,95 @@
+
+<div class="container">
+
+  <div>
+    <button mat-button class="close-button" color="accent" (click)="closeModal()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h1>Ingresar Datos</h1>
+  </div>
+  
+  <form class="mat-dialog-content"  name="editForm" (ngSubmit)="submit" #formControl="ngForm">
+    
+    <div class="form">
+      <label>Tipo Siniestro</label><br><br>
+      <mat-radio-group class="margin" [(ngModel)]="tipoSiniestro" name="tipoSiniestro">
+        <mat-radio-button class="margin" *ngFor="let siniestro of tiposiniestro" [value]="siniestro">
+          {{siniestro}}
+        </mat-radio-button>
+      </mat-radio-group>
+      <div *ngIf="tipoSiniestro=='Semoviente'">
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de semoviente" [(ngModel)]="semoviente" name="semoviente" required>
+            <mat-option *ngFor="let sem of semovientes" [value]="sem.idElemento">
+              {{sem.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div *ngIf="tipoSiniestro=='Cultivo'">
+        <mat-form-field color="accent" class="form-field">
+          <mat-select placeholder="Tipo de cultivo" [(ngModel)]="cultivo" name="cultivo" required>
+            <mat-option *ngFor="let cul of cultivos" [value]="cul.idElemento">
+              {{cul.descripcion}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+      </div>  
+    </div>  
+  
+    <div class="form">
+      <mat-form-field color="accent" class="form-field">
+        <mat-select placeholder="Tipo de documento de identificación cliente" [(ngModel)]="tipoId" name="tipoId" required>
+          <mat-option *ngFor="let doc of documentos" [value]="doc.idElemento" >
+            {{doc.descripcion}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field color="accent"  class="form-field">
+        <input matInput type="number" placeholder="Número de identificación cliente" name="IdCliente" [(ngModel)]="IdCliente" required>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form"> 
+      <mat-form-field color="accent" class="form-field">
+        <input matInput [matDatepicker]="picker" placeholder="Fecha de aviso" required name="fehcaAviso" [(ngModel)]="fehcaAviso">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>          
+      <mat-form-field color="accent" class="form-field">
+        <input matInput [matDatepicker]="picker2" placeholder="Fecha de inspección" required name="fechaInspeccion" [(ngModel)]="fechaInspeccion">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field  color="accent" class="form-field">
+        <input matInput type="number" placeholder="Amparo afectado" required name="amparo" [(ngModel)]="amparo">
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field color="accent" class="form-field">
+        <input matInput type="number" placeholder="Valor del siniestro" required name="valorSiniestro" [(ngModel)]="valorSiniestro">
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form">           
+      <mat-form-field color="accent" class="form-field">
+        <input matInput type="number" placeholder="Deducible" required name="deducible" [(ngModel)]="deducible">
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+      <mat-form-field color="accent" class="form-field">
+        <input matInput type="number" placeholder="Valor a indemnizar" required  name="valorIndemnizar" [(ngModel)]="valorIndemnizar">
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>   
+  </form>
+
+  <div class="button-row">
+    <button class="button-icon" mat-button [type]="submit" color="primary" [disabled]="!formControl.valid" (click)="confirmAdd()">Insertar</button>
+    <button class="button-icon" mat-button [type]="reset" color="primary" (click)="formControl.reset()">Limpiar</button>
+  </div>
+</div>

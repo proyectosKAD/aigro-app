@@ -1,0 +1,117 @@
+<mat-toolbar color="primary">
+  <img src="../assets/logo_aigro.jpg">
+  <a mat-button routerLink="/insertar">INGRESAR</a>
+  <a mat-button routerLink="/modificar">MODIFICAR</a>
+  <a mat-button routerLink="/consultar">BUSCAR</a>
+  <a mat-button routerLink="/consultar">MODELAR</a>
+</mat-toolbar>
+<div class="container">
+  <div>
+    <h1>Consultar Datos</h1>
+  </div>
+
+  <form name="consultarForm" (ngSubmit)="submit" #formControl="ngForm">
+  <div>
+    <div>
+        <mat-radio-group class="margin" [(ngModel)]="tiporegistro" name="tiporegistro" required>
+          <mat-radio-button class="radio-button" *ngFor="let season of seasons" [value]="season" required>
+            {{season}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <div *ngIf="tiporegistro=='Cultivo'">
+          <mat-form-field class="form-field-peq">
+            <mat-select placeholder="Tipo de cultivo" [(ngModel)]="tipoCultivo" name="tipoCultivo">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let cul of cultivos" [value]="cul.idElemento">
+                {{cul.descripcion}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="tiporegistro=='Semoviente'">
+            <mat-form-field class="form-field-peq">
+              <mat-select placeholder="Tipo de semoviente" [(ngModel)]="tipoSemoviente" name="tipoSemoviente">
+                <mat-option>--</mat-option>
+                <mat-option *ngFor="let sem of semovientes" [value]="sem.idElemento">
+                  {{sem.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      </div>
+      <div *ngIf="tiporegistro=='Cultivo' || tiporegistro=='Semoviente' ">
+          <div> 
+            <mat-form-field class="form-field">
+              <input matInput type="text" placeholder="Nombre de la Finca" [(ngModel)]="finca" name="finca">
+              <button mat-button *ngIf="finca" matSuffix mat-icon-button aria-label="Clear" (click)="finca=''">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <!--<div>
+            <mat-form-field class="form-field">
+              <input matInput type="text" placeholder="Asegurado" [(ngModel)]="asegurado" name="asegurado">
+            </mat-form-field>
+          </div>-->
+          <div>
+            <mat-form-field class="form-field">
+              <input matInput type="number" placeholder="Número de identificación cliente" [(ngModel)]="idcliente" name="idcliente">
+              <button mat-button *ngIf="idcliente" matSuffix mat-icon-button aria-label="Clear" (click)="idcliente=''">
+                <mat-icon>close</mat-icon>
+              </button>   
+            </mat-form-field>
+          </div>
+      </div>
+    </div>
+  </form>
+  
+    <div class="button-row">
+        <button class="button-icon" mat-button [type]="submit" color="primary" [disabled]="!formControl.valid" (click)="consultarDatos()">Consultar</button>
+    </div>   
+
+  <div *ngIf="show" class="table-data">
+    <!--<ng-container *ngIf="show">-->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="tipoNegocio">
+        <th mat-header-cell *matHeaderCellDef> Tipo Negocio </th>
+        <td mat-cell *matCellDef="let element"> {{element.tipoNegocio}} </td>
+      </ng-container>
+      <ng-container matColumnDef="nombreFinca">
+        <th mat-header-cell *matHeaderCellDef> Nombre Finca </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombreFinca}} </td>
+      </ng-container>
+      <ng-container matColumnDef="numeroPoliza">
+        <th mat-header-cell *matHeaderCellDef> Numero Poliza </th>
+        <td mat-cell *matCellDef="let element"> {{element.numeroPoliza}} </td>
+      </ng-container>
+      <ng-container matColumnDef="idCliente">
+        <th mat-header-cell *matHeaderCellDef> Identificacion Tomador </th>
+        <td mat-cell *matCellDef="let element"> {{element.idCliente}} </td>
+      </ng-container>
+      <ng-container matColumnDef="idAsegurado">
+        <th mat-header-cell *matHeaderCellDef> Identificacion Asegurado </th>
+        <td mat-cell *matCellDef="let element"> {{element.idAsegurado}} </td>
+      </ng-container>
+   
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-toolbar class="paginator">
+      <mat-toolbar-row class="paginator">
+        <div class="paginator">
+          <mat-icon  (click)="exportar()" title="Export as CSV">save_alt</mat-icon>
+        </div>
+        <div class="paginator">
+          <mat-paginator [length]="length" [pageSizeOptions]="[3,5,10,15,20]" showFirstLastButtons></mat-paginator>
+        </div>        
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div [hidden]="true">
+      <angular2csv #csvComponent [data]="csvData" filename="Aigro_Negocios" [options]="csvOptions"></angular2csv>
+    </div>
+
+  <!--</ng-container>-->
+  </div>
+  
+  </div>
